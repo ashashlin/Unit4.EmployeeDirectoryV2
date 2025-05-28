@@ -26,13 +26,19 @@ employeesRouter.get("/:id", (req, res) => {
   res.send(employee);
 });
 
-employeesRouter.post("/", newEmployee, (req, res) => {
-  const currentId = employees.length;
-  const name = req.body.name;
-  const newEmployee = { id: currentId + 1, name };
-  employees.push(newEmployee);
+employeesRouter.post("/", newEmployee, (req, res, next) => {
+  try {
+    const currentId = employees.length;
+    const name = req.body.name;
+    const newEmployee = { id: currentId + 1, name };
+    employees.push(newEmployee);
 
-  res.status(200).send(`New employee ${name} is successfully added.`);
+    res
+      .status(201)
+      .json({ message: `New employee ${name} is successfully added.` });
+  } catch (error) {
+    next(error);
+  }
 });
 
 export default employeesRouter;
