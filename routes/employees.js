@@ -1,5 +1,6 @@
 import express from "express";
 import employees from "#db/employees";
+import newEmployee from "#middleware/newEmployee";
 
 const employeesRouter = express.Router();
 
@@ -23,6 +24,15 @@ employeesRouter.get("/:id", (req, res) => {
   }
 
   res.send(employee);
+});
+
+employeesRouter.post("/", newEmployee, (req, res) => {
+  const currentId = employees.length;
+  const name = req.body.name;
+  const newEmployee = { id: currentId + 1, name };
+  employees.push(newEmployee);
+
+  res.status(200).send(`New employee ${name} is successfully added.`);
 });
 
 export default employeesRouter;
